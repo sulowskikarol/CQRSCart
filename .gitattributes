@@ -1,0 +1,17 @@
+# Domyślnie wszystkie pliki tekstowe z LF
+* text=auto eol=lf
+
+# Pliki Java i XML zawsze z końcem linii LF
+*.java text eol=lf
+*.xml text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.sh text eol=lf
+
+# Pliki skryptowe Windowsowe z CRLF
+*.cmd text eol=crlf
+*.bat text eol=crlf
+
+# Narzędzia mavenowe
+/mvnw text eol=lf
+/mvnw.cmd text eol=crlf
