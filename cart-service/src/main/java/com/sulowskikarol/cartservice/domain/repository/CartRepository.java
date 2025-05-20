@@ -9,5 +9,5 @@ public interface CartRepository {
 
     Optional<Cart> findById(UUID cartId);
     Optional<Cart> findActiveByUserId(UUID userId);
-    Cart save(Cart cart);
+    UUID save(Cart cart);
 }
