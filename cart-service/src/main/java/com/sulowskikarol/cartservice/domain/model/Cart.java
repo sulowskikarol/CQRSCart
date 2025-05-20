@@ -1,6 +1,7 @@
 package com.sulowskikarol.cartservice.domain.model;
 
 import com.sulowskikarol.cartservice.domain.model.enums.CartStatus;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -12,21 +13,29 @@ import java.util.UUID;
 
 @Getter
 @EqualsAndHashCode(of = "id")
+@AllArgsConstructor
 public class Cart {
 
     private final UUID id;
     private final UUID userId;
-    private final List<CartItem> items = new ArrayList<>();
-    private CartStatus status = CartStatus.ACTIVE;
-    private final LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private final List<CartItem> items;
+    private CartStatus status;
+    private final LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public Cart(UUID id, UUID userId) {
-        this.id = id;
-        this.userId = userId;
+    public static Cart createCart(UUID userId) {
+        UUID cardId = UUID.randomUUID();
+        return new Cart(
+                cardId,
+                userId,
+                new ArrayList<>(),
+                CartStatus.ACTIVE,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
     }
 
-    private void addProduct(CartItem item) {
+    public void addProduct(CartItem item) {
         assertActive();
 
         CartItem existing = items.stream()
@@ -35,7 +44,7 @@ public class Cart {
                 .orElse(null);
 
         if (existing != null) {
-            existing.setQuantity(item.getQuantity());
+            existing.setQuantity(existing.getQuantity() + item.getQuantity());
         } else {
             items.add(item);
         }
