@@ -44,7 +44,7 @@ public class Cart {
                 .orElse(null);
 
         if (existing != null) {
-            existing.setQuantity(item.getQuantity());
+            existing.setQuantity(existing.getQuantity() + item.getQuantity());
         } else {
             items.add(item);
         }
