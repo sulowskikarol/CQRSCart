@@ -23,16 +23,19 @@ public class Cart {
     private final LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    Cart(UUID id, UUID userId) {
-        this.id = id;
-        this.userId = userId;
-        this.items = new ArrayList<>();
-        this.status = CartStatus.ACTIVE;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+    public static Cart createCart(UUID userId) {
+        UUID cardId = UUID.randomUUID();
+        return new Cart(
+                cardId,
+                userId,
+                new ArrayList<>(),
+                CartStatus.ACTIVE,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
     }
 
-    private void addProduct(CartItem item) {
+    public void addProduct(CartItem item) {
         assertActive();
 
         CartItem existing = items.stream()

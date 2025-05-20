@@ -6,10 +6,12 @@ import com.sulowskikarol.cartservice.domain.repository.CartRepository;
 import com.sulowskikarol.cartservice.infrastructure.repository.entity.CartEntity;
 import com.sulowskikarol.cartservice.infrastructure.repository.jpa.mapper.CartJpaMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 import java.util.UUID;
 
+@Repository
 @RequiredArgsConstructor
 public class CartRepositoryImpl implements CartRepository {
 
