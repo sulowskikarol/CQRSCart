@@ -52,12 +52,20 @@ public class Cart {
         touch();
     }
 
-    public void removeProduct(UUID productId) {
+    public void removeProduct(UUID productId, int quantity) {
         assertActive();
 
-        boolean removed = items.removeIf(item -> item.getProductId().equals(productId));
-        if (!removed) {
-            throw new IllegalStateException("Product not found in cart");
+        CartItem existing = items.stream()
+                .filter(i -> i.getProductId().equals(productId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        if (existing.getQuantity() - quantity < 0) {
+            throw new IllegalArgumentException("Quantity less than zero after removal");
+        } else if (existing.getQuantity() == quantity) {
+            items.remove(existing);
+        } else {
+            existing.setQuantity(existing.getQuantity() - quantity);
         }
 
         touch();

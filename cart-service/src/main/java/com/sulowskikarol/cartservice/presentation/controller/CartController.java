@@ -40,8 +40,8 @@ public class CartController {
     }
 
     @DeleteMapping("/product")
-    public ResponseEntity<Void> removeProduct(@RequestParam UUID userId, @RequestParam UUID productId) {
-        commandMediator.send(new RemoveProductCommand(userId, productId));
+    public ResponseEntity<Void> removeProduct(@RequestParam UUID userId, @RequestParam UUID productId, @RequestParam int quantity) {
+        commandMediator.send(new RemoveProductCommand(userId, productId, quantity));
         return ResponseEntity.ok().build();
     }
 
