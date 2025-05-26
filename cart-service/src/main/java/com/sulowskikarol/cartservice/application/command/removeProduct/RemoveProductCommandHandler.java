@@ -17,7 +17,7 @@ public class RemoveProductCommandHandler implements CommandHandler<RemoveProduct
         Cart cart = cartRepository.findActiveByUserId(command.userId())
                 .orElseThrow(() -> new IllegalArgumentException("Active cart for this user not found"));
 
-        cart.removeProduct(command.productId());
+        cart.removeProduct(command.productId(), command.quantity());
         cartRepository.save(cart);
 
         return null;
