@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres
+    container_name: cqrscart-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - cqrscart-postgres:/var/lib/postgresql/data
+
+  product-service:
+    build: ./product-mock
+    container_name: product-service
+    ports:
+      - "8081:8080"
+
+  cart-service:
+    build: ./cart-service
+    container_name: cart-service
+    depends_on:
+      - postgres
+      - product-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      PRODUCT_SERVICE_BASE_URL: ${PRODUCT_SERVICE_BASE_URL}
+    ports:
+      - "8080:8080"
+
+volumes:
+  cqrscart-postgres:

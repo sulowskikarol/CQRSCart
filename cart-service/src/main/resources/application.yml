@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: cart-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+product-service:
+  base-url: ${PRODUCT_SERVICE_BASE_URL}
