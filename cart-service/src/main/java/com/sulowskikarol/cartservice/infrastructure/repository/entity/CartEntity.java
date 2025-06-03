@@ -1,6 +1,5 @@
 package com.sulowskikarol.cartservice.infrastructure.repository.entity;
 
-import com.sulowskikarol.cartservice.domain.model.CartItem;
 import com.sulowskikarol.cartservice.domain.model.enums.CartStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,10 +22,12 @@ public class CartEntity {
     @Column(nullable = false)
     private UUID userId;
 
+    @Setter
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "cart_items", joinColumns = @JoinColumn(name = "cart_id"))
     private List<CartItemEmbeddable> items = new ArrayList<>();
 
+    @Setter
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private CartStatus status;
@@ -34,6 +35,11 @@ public class CartEntity {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Setter
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @Version
+    private Long version;
+
 }

@@ -1,5 +1,6 @@
 package com.sulowskikarol.cartservice.application.command.common;
 
+import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -13,8 +14,19 @@ public class CommandMediatorImpl implements CommandMediator {
     @Override
     @SuppressWarnings("unchecked")
     public <R, C extends Command<R>> R send(C command) {
+        int maxRetry = 3;
         CommandHandler<C, R> handler = (CommandHandler<C, R>) context.getBean(getHandlerClass(command));
-        return handler.handle(command);
+
+        for (int attempt = 0; attempt < maxRetry; attempt++) {
+            try {
+                return handler.handle(command);
+            } catch (OptimisticLockException ex) {
+                if (attempt == maxRetry - 1) {
+                    throw new RuntimeException("Cannot execute command:" + ex);
+                }
+            }
+        }
+        return null;
     }
 
     private <C extends Command<?>> Class<?> getHandlerClass(C command) {

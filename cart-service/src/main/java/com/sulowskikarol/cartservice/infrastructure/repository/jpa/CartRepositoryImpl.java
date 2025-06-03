@@ -5,6 +5,7 @@ import com.sulowskikarol.cartservice.domain.model.enums.CartStatus;
 import com.sulowskikarol.cartservice.domain.repository.CartRepository;
 import com.sulowskikarol.cartservice.infrastructure.repository.entity.CartEntity;
 import com.sulowskikarol.cartservice.infrastructure.repository.jpa.mapper.CartJpaMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -30,9 +31,16 @@ public class CartRepositoryImpl implements CartRepository {
                 .map(cartJpaMapper::toDomain);
     }
 
+    @Transactional
     @Override
     public UUID save(Cart cart) {
-        CartEntity saved = cartJpaRepository.save(cartJpaMapper.toEntity(cart));
-        return saved.getId();
+        Optional<CartEntity> optionalCartEntity = cartJpaRepository.findById(cart.getId());
+
+        CartEntity cartEntity = optionalCartEntity.map(entity -> {
+            cartJpaMapper.updateEntity(entity, cart);
+            return entity;
+        }).orElseGet(() -> cartJpaMapper.toEntity(cart));
+
+        return cartJpaRepository.save(cartEntity).getId();
     }
 }
