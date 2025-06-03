@@ -5,6 +5,8 @@ import com.sulowskikarol.cartservice.domain.model.CartItem;
 import com.sulowskikarol.cartservice.infrastructure.repository.entity.CartEntity;
 import com.sulowskikarol.cartservice.infrastructure.repository.entity.CartItemEmbeddable;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
@@ -13,7 +15,11 @@ public interface CartJpaMapper {
 
     Cart toDomain(CartEntity cartEntity);
 
+    @Mapping(target = "version", ignore = true)
     CartEntity toEntity(Cart cart);
+
+    @Mapping(target = "version", ignore = true)
+    void updateEntity(@MappingTarget CartEntity cartEntity, Cart cart);
 
     CartItem toDomain(CartItemEmbeddable cartItemEmbeddable);
 
